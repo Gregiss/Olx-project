@@ -1,16 +1,19 @@
 const express = require('express')
 const router = express.Router()
 
+const Auth = require('./middlewares/Auth')
+
 const AuthController = require('./controllers/AuthController')
 const AdsController = require('./controllers/AdsController')
 const UserController = require('./controllers/UserController')
+
 
 
 router.get('/ping', (req,res)=>{
     req.json({pong:true})
 })
 
-router.get('/states', UserController.getStates)
+router.get('/states',Auth.private, UserController.getStates)
 
 router.post('/user/signin',AuthController.signin)
 router.post('/user/signup',AuthController.signup)
