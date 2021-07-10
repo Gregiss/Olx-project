@@ -5,6 +5,8 @@
  const fileupload = require('express-fileupload')
 const fileUpload = require('express-fileupload')
 
+const apiRoutes = require('./src/routes')
+
  mongoose.connect(process.env.DATABASE, {
       
     useNewUrlParser : true,
@@ -28,9 +30,8 @@ const fileUpload = require('express-fileupload')
 
  server.use(express.static(__dirname+'/public'))
 
- server.get('/ping',(req,res)=>{
-     res.json({pong:true})
- })
+ server.use('/', apiRoutes)
+
 
  server.listen(process.env.PORT, ()=>{
      console.log(`- Rodando no endereço: ${process.env.BASE}`)
