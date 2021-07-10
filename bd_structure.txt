@@ -16,7 +16,7 @@ categories
 -slug
 
 
-add
+ads
 -id
 -images[{url,default:true}]
 -idUser
