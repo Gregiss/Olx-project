@@ -1,3 +1,5 @@
+const {validationResult,matchedData} = require('express-validator')
+
 const State = reqquire('../models/State')
 const User = require('../models/Users')
 const Category = require('../models/Category')
@@ -46,6 +48,36 @@ module.exports = {
         })
     },
     editAction: async (req,res)=> {
+        
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            req.json({error: errors.mapped()})
+            return
+        }
+        
+        const data= matchedData(req)
+
+
+        const User = await User.findOne({token: data.token})
+        
+
+        let updates ={}
+
+        if(date.name) {
+            updates.name = data.name
+        }
+
+        if(data.email){
+            const emailcheck = await User.findOne({email: data.email})
+            if(emailcheck){
+                res.json({error:'Email já existente'})
+                return
+            }
+            updates.email= data.email
+        }
+
+        await User.findOneAndUpadate({token: data.token},{$set: updates})
+        res.json({})
 
     }
 
