@@ -1,4 +1,4 @@
-const Category = requqire('../models/Category')
+const Category = require('../models/Category')
 
 module.exports = {
     getCategories: async (req,res)=> {     
