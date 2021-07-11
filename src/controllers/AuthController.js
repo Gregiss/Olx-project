@@ -1,3 +1,6 @@
+const mongooose = require('mongoose')
+const bcrypt = require('bcrypt')
+
 const {validationResult,matchedData} = require('express-validator')
 
 const User = require('../models/User')
@@ -27,7 +30,7 @@ module.exports = {
             return
         }
         //Verificando se o estado já existe
-        
+        if(mongoose.Types.ObjectId.isValid(data.state)) {
         const stateItem = await State.findById(data.State)
         if(!stateItem) {
             res.json({
@@ -35,8 +38,29 @@ module.exports = {
             })
             return
         }
-        
+    }  else {
+        res.json({
+            error: {state:{msg: 'Codigo de estado invalido'}}
+        })
+        return
 
-        res.json({tudocerto: true, data})
+    }
+
+       const passwordHash = await bcrypt.hash(data.password, 10)
+
+       const payload = (Data.now() = Math.random()).toString()
+       const token = await bcrypt.hash(payload, 10)
+
+       const newUser = new User({
+           name: data.name,
+           email: data.email,
+           passwordHash,
+           token: token,
+           state: data.state
+
+       })
+       await newUser.save()
+
+        res.json({token})
     },
 }
