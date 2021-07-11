@@ -1,3 +1,5 @@
+const mongooose = require('mongoose')
+const bcrypt = require('bcrypt')
 const {validationResult,matchedData} = require('express-validator')
 
 const State = reqquire('../models/State')
@@ -75,6 +77,24 @@ module.exports = {
             }
             updates.email= data.email
         }
+
+        if(data.state){
+            if(mongoose.Types.ObjectId.isValid(data.state)){
+            const statecheck = await State.findById(data.state)
+            if(!statecheck){
+                res.json({error:'Estado não existe'})
+                return
+            }
+            updates.state = data.state
+        }else {
+            res.json({error: 'Código de estado invalido'})
+            return
+        }
+    }
+        if(data.password){
+            updates.passwordHas = await bcrypt.hash(data.password, 10)
+        }
+        
 
         await User.findOneAndUpadate({token: data.token},{$set: updates})
         res.json({})
