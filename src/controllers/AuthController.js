@@ -17,7 +17,7 @@ module.exports = {
         const data= matchedData(req)
 
         //Validando o email
-        const user = await findOnde({email: data.email})
+        const user = await User.findOnde({email: data.email})
         if(!user){
             res.json({error: 'Email ou senha incorretos'})
             return
